@@ -71,8 +71,8 @@ struct SSS {
     auto operator()() const
     {
         return sml::make_transition_table(
-            sml::state<SSS2> <= *sml::state<SSS1> +sml::event<ess1>,
-            sml::X <= sml::state<SSS2>  +sml::event<ess2>
+            sml::state<SSS2> <= *sml::state<SSS1> + sml::event<ess1>,
+            sml::X           <=  sml::state<SSS2> + sml::event<ess2>
         );
     }
 };
@@ -81,11 +81,11 @@ struct SS {
     auto operator()() const
     {
         return sml::make_transition_table(
-            sml::state<SS2>     <= *sml::state<SS1> + sml::event<es1> [can_change] / a1,
-            sml::state<SSS>     <= sml::state<SS2>  + sml::event<es0>,
-            sml::state<SS2>     <= sml::state<SSS>  + sml::event<es4>,
-            sml::state<SS3>     <= sml::state<SS2>  + sml::event<es2>,
-            sml::X              <= sml::state<SS3>  + sml::event<es3>
+            sml::state<SS2> <= *sml::state<SS1> + sml::event<es1> [can_change] / a1,
+            sml::state<SSS> <=  sml::state<SS2> + sml::event<es0>,
+            sml::state<SS2> <=  sml::state<SSS> + sml::event<es4>,
+            sml::state<SS3> <=  sml::state<SS2> + sml::event<es2>,
+            sml::X          <=  sml::state<SS3> + sml::event<es3>
         );
     }
 };
@@ -96,10 +96,10 @@ struct Controller
     {
         return sml::make_transition_table(
             sml::state<S2>     <= *sml::state<S1> + sml::event<e1>,
-            sml::state<S3>     <= sml::state<S2>  + sml::event<e2>,
-            sml::state<SS>     <= sml::state<S3>  + sml::event<e3>,
-            sml::state<S3>     <= sml::state<SS>  + sml::event<e4>,
-            sml::X             <= sml::state<S3>  + sml::event<e5>
+            sml::state<S3>     <=  sml::state<S2> + sml::event<e2>,
+            sml::state<SS>     <=  sml::state<S3> + sml::event<e3>,
+            sml::state<S3>     <=  sml::state<SS> + sml::event<e4>,
+            sml::X             <=  sml::state<S3> + sml::event<e5>
         );
     }
 };
