@@ -27,31 +27,63 @@ struct state_machine_logger {
     }
 };
 
-// Events
+// Toplevel Events
 struct e1 {};
 struct e2 {};
 struct e3 {};
 struct e4 {};
 struct e5 {};
 
+// Sublevel Events
+struct es0 {};
 struct es1 {};
 struct es2 {};
 struct es3 {};
+struct es4 {};
 
+// Toplevel States
 struct S1 {};
 struct S2 {};
 struct S3 {};
+struct S4 {};
 
+struct ess1 {};
+struct ess2 {};
+
+// Sublevel States
 struct SS1 {};
 struct SS2 {};
 struct SS3 {};
 struct SS4 {};
 
+struct SSS1 {};
+struct SSS2 {};
+
+// Actions
+auto a1 = [] { };
+auto a2 = [] { };
+
+// Guards
+auto can_change = [] { return true; };
+auto no_change = [] { return false; };
+
+struct SSS {
+    auto operator()() const
+    {
+        return sml::make_transition_table(
+            sml::state<SSS2> <= *sml::state<SSS1> +sml::event<ess1>,
+            sml::X <= sml::state<SSS2>  +sml::event<ess2>
+        );
+    }
+};
+
 struct SS {
     auto operator()() const
     {
         return sml::make_transition_table(
-            sml::state<SS2>     <= *sml::state<SS1> + sml::event<es1>,
+            sml::state<SS2>     <= *sml::state<SS1> + sml::event<es1> [can_change] / a1,
+            sml::state<SSS>     <= sml::state<SS2>  + sml::event<es0>,
+            sml::state<SS2>     <= sml::state<SSS>  + sml::event<es4>,
             sml::state<SS3>     <= sml::state<SS2>  + sml::event<es2>,
             sml::X              <= sml::state<SS3>  + sml::event<es3>
         );
@@ -83,6 +115,10 @@ int main()
     sm.process_event(e2{});
     sm.process_event(e3{});
     sm.process_event(es1{});
+    sm.process_event(es0{});
+    sm.process_event(ess1{});
+    sm.process_event(ess2{});
+    sm.process_event(es4{});
     sm.process_event(es2{});
     sm.process_event(es3{});
     sm.process_event(e4{});
